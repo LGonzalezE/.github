@@ -8,6 +8,7 @@ Archivos comunes de todos los repos de `LGonzalezE`. GitHub los usa en cualquier
 | `ISSUE_TEMPLATE/` | Formularios de funcionalidad, error y seguridad. Ponen labels y assignee y agregan el issue al [Project Yggdrasil](https://github.com/users/LGonzalezE/projects/1) |
 | `SECURITY.md` | Cómo reportar vulnerabilidades de forma privada |
 | `.github/workflows/maven.yml` | CI reutilizable para Maven: build y tests con `mvnw` o `mvn` |
+| `.github/workflows/python.yml` | CI reutilizable para Python: `requirements.txt` y pytest |
 | `.github/workflows/npm.yml` | CI reutilizable para npm: `npm ci`, lint, tests y build |
 
 Un repo que tenga su propia carpeta `.github/ISSUE_TEMPLATE` o su propio `PULL_REQUEST_TEMPLATE.md` deja de usar los de aquí para ese archivo.
