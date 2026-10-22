@@ -42,4 +42,6 @@ jobs:
       working-directory: frontend
 ```
 
+Si los tests necesitan una base de datos real, pasa `postgres-db: <nombre>`: el job levanta Postgres 16 y exporta `SPRING_DATASOURCE_URL`, `_USERNAME` y `_PASSWORD`.
+
 Si el backend depende de un paquete de otro repo (el codec), pasa `secrets: { packages-token: ${{ secrets.CODEC_PACKAGES_TOKEN }} }`.
