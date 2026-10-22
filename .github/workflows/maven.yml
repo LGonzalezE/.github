@@ -1,0 +1,60 @@
+name: Maven
+
+# Workflow reutilizable: compila y pasa los tests de un proyecto Maven.
+# Uso desde otro repo:
+#   jobs:
+#     backend:
+#       uses: LGonzalezE/.github/.github/workflows/maven.yml@main
+#       with:
+#         working-directory: backend
+#         java-version: '21'
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: Carpeta del pom.xml
+        type: string
+        default: .
+      java-version:
+        type: string
+        default: '17'
+      goal:
+        description: Fase de Maven que se ejecuta
+        type: string
+        default: verify
+    secrets:
+      packages-token:
+        description: Token con read:packages, solo si el proyecto depende de paquetes de otro repo (p. ej. el codec)
+        required: false
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ inputs.java-version }}
+          cache: maven
+          cache-dependency-path: ${{ inputs.working-directory }}/pom.xml
+          # Genera ~/.m2/settings.xml con el servidor de GitHub Packages
+          server-id: github-yggdrasil
+          server-username: GITHUB_ACTOR
+          server-password: MAVEN_PACKAGES_TOKEN
+      - name: Build y tests
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          MAVEN_PACKAGES_TOKEN: ${{ secrets.packages-token || github.token }}
+        run: |
+          if [ -f mvnw ]; then chmod +x mvnw; MVN=./mvnw; else MVN=mvn; fi
+          $MVN -B -ntp ${{ inputs.goal }}
