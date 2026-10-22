@@ -23,6 +23,10 @@ on:
         description: Fase de Maven que se ejecuta
         type: string
         default: verify
+      postgres-db:
+        description: Si se indica, levanta un Postgres 16 con esa base y exporta SPRING_DATASOURCE_* para los tests
+        type: string
+        default: ''
     secrets:
       packages-token:
         description: Token con read:packages, solo si el proyecto depende de paquetes de otro repo (p. ej. el codec)
@@ -36,6 +40,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      postgres:
+        # Con imagen vacía el servicio no se crea
+        image: ${{ inputs.postgres-db != '' && 'postgres:16-alpine' || '' }}
+        env:
+          POSTGRES_DB: ${{ inputs.postgres-db }}
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
@@ -51,6 +69,13 @@ jobs:
           server-id: github-yggdrasil
           server-username: GITHUB_ACTOR
           server-password: MAVEN_PACKAGES_TOKEN
+      - name: Datasource de Postgres
+        if: inputs.postgres-db != ''
+        # Credenciales efímeras del contenedor de CI, no las de DEV
+        run: |
+          echo "SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/${{ inputs.postgres-db }}" >> "$GITHUB_ENV"
+          echo "SPRING_DATASOURCE_USERNAME=postgres" >> "$GITHUB_ENV"
+          echo "SPRING_DATASOURCE_PASSWORD=postgres" >> "$GITHUB_ENV"
       - name: Build y tests
         env:
           GITHUB_ACTOR: ${{ github.actor }}
