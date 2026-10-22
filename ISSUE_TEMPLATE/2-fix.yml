@@ -1,0 +1,42 @@
+name: Error
+description: Algo no funciona como debería (fix)
+labels: [bug]
+assignees: [LGonzalezE]
+projects: [LGonzalezE/1]
+body:
+  - type: textarea
+    id: actual
+    attributes:
+      label: Qué pasa
+      description: Comportamiento actual, con el mensaje de error si lo hay.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Qué debería pasar
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducirlo
+      value: "1. "
+  - type: dropdown
+    id: env
+    attributes:
+      label: Entorno
+      options: [DEV, local, PROD]
+    validations:
+      required: true
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Capa
+      options: [frontend, backend, fullstack, infra]
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia
+      description: Logs, capturas, ids de transacción o de escenario.
+      render: text

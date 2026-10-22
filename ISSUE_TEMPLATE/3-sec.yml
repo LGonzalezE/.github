@@ -1,0 +1,35 @@
+name: Seguridad
+description: Riesgo o falla de seguridad en un repo privado (sec)
+labels: [security]
+assignees: [LGonzalezE]
+projects: [LGonzalezE/1]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Si el repo es **público**, no abras un issue: usa **Security → Report a vulnerability** (ver `SECURITY.md`).
+        No pegues secretos, tokens ni datos de tarjetas en el issue.
+  - type: textarea
+    id: risk
+    attributes:
+      label: Riesgo
+      description: Qué se puede explotar, quién podría hacerlo y con qué impacto.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severidad
+      options: [Crítica, Alta, Media, Baja]
+    validations:
+      required: true
+  - type: textarea
+    id: containment
+    attributes:
+      label: Contención propuesta
+  - type: checkboxes
+    id: rotate
+    attributes:
+      label: Credenciales
+      options:
+        - label: Hay que rotar o revocar algún secreto

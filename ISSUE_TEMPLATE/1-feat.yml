@@ -1,0 +1,30 @@
+name: Funcionalidad
+description: Algo nuevo o una mejora (feat)
+labels: [enhancement]
+assignees: [LGonzalezE]
+projects: [LGonzalezE/1]
+body:
+  - type: textarea
+    id: why
+    attributes:
+      label: Necesidad
+      description: Qué problema resuelve y para quién.
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: Propuesta
+      description: Qué debería cambiar. El detalle irá en el change de OpenSpec.
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Capa
+      options: [frontend, backend, fullstack, infra]
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      value: "- [ ] "
